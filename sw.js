@@ -2,7 +2,7 @@
  * Service worker — network-first for app shell so preview updates show
  * without requiring users to clear site data every patch.
  */
-const CACHE = "ev-kwh-v1-preset-label";
+const CACHE = "ev-kwh-v1-salin-flash";
 const SHELL = [
   "./",
   "./index.html",

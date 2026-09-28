@@ -248,18 +248,20 @@
   async function copyResult() {
     if (lastValidKwh === null) return;
     const text = lastValidKwh; // angka murni untuk app charger
+    // Flash segera biar tidak kalah race dengan await clipboard (automation / clipboard lambat).
+    flashCopied();
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(text);
       } else {
         fallbackCopy(text);
       }
-      flashCopied();
     } catch (e) {
       try {
         fallbackCopy(text);
-        flashCopied();
       } catch (e2) {
+        el.btnCopy.classList.remove("copied");
+        el.btnCopy.textContent = "Salin";
         el.resultMsg.hidden = false;
         el.resultMsg.textContent = "Gagal menyalin — salin manual: " + text;
       }
