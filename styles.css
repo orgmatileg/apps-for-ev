@@ -1,0 +1,418 @@
+/* EV Charging kWh Calculator — mobile-first */
+:root {
+  --bg: #f0f4f3;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #0f766e;
+  --primary-hover: #0d9488;
+  --primary-soft: #ccfbf1;
+  --border: #e2e8f0;
+  --error: #b91c1c;
+  --error-bg: #fef2f2;
+  --radius: 14px;
+  --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+}
+
+.header {
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--surface);
+  border-radius: calc(var(--radius) + 4px);
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1.15rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.section.row {
+  flex-direction: row;
+  gap: 0.75rem;
+}
+
+.section.row .field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.hint-strong {
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.error {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--error);
+  background: var(--error-bg);
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+}
+
+.error[hidden] {
+  display: none;
+}
+
+/* Segmented control */
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  background: var(--bg);
+  border-radius: 12px;
+}
+
+.segment {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0.65rem 0.75rem;
+  border-radius: 9px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.segment.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.1);
+}
+
+/* Chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  appearance: none;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.chip.active {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+/* Inputs */
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 1.0625rem;
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.18);
+}
+
+input[type="number"].invalid {
+  border-color: var(--error);
+}
+
+input[type="number"].invalid:focus {
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.15);
+}
+
+/* Hide spinner on number inputs for cleaner mobile look */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Toggle switch */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 48px;
+  height: 28px;
+  background: var(--border);
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+
+.toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.toggle input:checked + .toggle-track {
+  background: var(--primary);
+}
+
+.toggle input:checked + .toggle-track::after {
+  transform: translateX(20px);
+}
+
+.toggle input:focus-visible + .toggle-track {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.toggle-text {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+/* Result block */
+.result {
+  margin-top: 0.25rem;
+  padding: 1.25rem 1rem;
+  background: linear-gradient(160deg, #0f766e 0%, #134e4a 100%);
+  border-radius: var(--radius);
+  text-align: center;
+  color: #fff;
+}
+
+.result-label {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  opacity: 0.85;
+  letter-spacing: 0.02em;
+}
+
+.result-value {
+  margin: 0.2rem 0 0;
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.result-unit {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.result-loss {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  opacity: 0.95;
+}
+
+.result-loss[hidden] {
+  display: none;
+}
+
+.result.is-disabled .result-loss {
+  display: none;
+}
+
+.result-msg {
+  margin: 0.65rem 0 0;
+  font-size: 0.8125rem;
+  opacity: 0.95;
+  line-height: 1.35;
+}
+
+.result-msg[hidden] {
+  display: none;
+}
+
+.result.is-disabled .result-value {
+  opacity: 0.45;
+  font-size: 2.25rem;
+}
+
+.result.is-disabled .result-unit {
+  opacity: 0.45;
+}
+
+.btn-copy {
+  appearance: none;
+  margin-top: 0.9rem;
+  padding: 0.65rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: background 0.15s, color 0.15s, opacity 0.15s, transform 0.1s;
+}
+
+.btn-copy:hover:not(:disabled) {
+  background: #f0fdfa;
+  color: #0d9488;
+}
+
+.btn-copy:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.btn-copy:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-copy.copied {
+  background: #ccfbf1;
+  color: #134e4a;
+}
+
+.footer {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+@media (min-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .result-value {
+    font-size: 3.5rem;
+  }
+}

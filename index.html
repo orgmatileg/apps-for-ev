@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="Kalkulator kWh pengisian baterai EV untuk mobil dan motor listrik" />
+  <meta name="theme-color" content="#0f766e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="kWh EV" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>Kalkulator kWh Charging EV</title>
+  <link rel="stylesheet" href="styles.css?v=cap-hint-v3" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Kalkulator kWh Charging</h1>
+      <p class="subtitle">Estimasi energi pengisian — mobil &amp; motor listrik</p>
+    </header>
+
+    <main class="card">
+      <!-- Vehicle type toggle -->
+      <section class="section" aria-labelledby="vehicle-label">
+        <span id="vehicle-label" class="label">Jenis kendaraan</span>
+        <div class="segmented" role="group" aria-labelledby="vehicle-label">
+          <button type="button" class="segment active" data-vehicle="mobil" id="btn-mobil" aria-pressed="true">Mobil</button>
+          <button type="button" class="segment" data-vehicle="motor" id="btn-motor" aria-pressed="false">Motor</button>
+        </div>
+      </section>
+
+      <!-- Capacity presets -->
+      <section class="section" aria-labelledby="presets-label">
+        <span id="presets-label" class="label">Preset model (usable kWh)</span>
+        <div class="chips" id="presets" role="group" aria-labelledby="presets-label"></div>
+      </section>
+
+      <!-- Capacity field -->
+      <section class="section">
+        <label class="label" for="capacity">Kapasitas baterai (kWh)</label>
+        <input
+          type="number"
+          id="capacity"
+          inputmode="decimal"
+          min="0.1"
+          step="0.1"
+          placeholder="mis. 60"
+          autocomplete="off"
+        />
+        <p class="hint" id="capacity-hint">Kalau ragu, pakai angka brochure — bisa diubah.</p>
+        <p class="error" id="capacity-error" hidden></p>
+      </section>
+
+      <!-- % fields -->
+      <section class="section row">
+        <div class="field">
+          <label class="label" for="current">% sekarang</label>
+          <input
+            type="number"
+            id="current"
+            inputmode="decimal"
+            min="0"
+            max="100"
+            step="1"
+            value="20"
+            placeholder="0–100"
+            autocomplete="off"
+          />
+          <p class="error" id="current-error" hidden></p>
+        </div>
+        <div class="field">
+          <label class="label" for="target">% target</label>
+          <input
+            type="number"
+            id="target"
+            inputmode="decimal"
+            min="0"
+            max="100"
+            step="1"
+            value="80"
+            placeholder="0–100"
+            autocomplete="off"
+          />
+          <p class="hint" id="target-hint">Sesuaikan batas charge di mobil (mis. 95)</p>
+          <p class="error" id="target-error" hidden></p>
+        </div>
+      </section>
+
+      <!-- Loss toggle -->
+      <section class="section">
+        <label class="toggle">
+          <input type="checkbox" id="loss" />
+          <span class="toggle-track" aria-hidden="true"></span>
+          <span class="toggle-text">Hitung loss charging ~10%</span>
+        </label>
+        <p class="hint hint-strong" id="loss-hint">Aktifkan biar Salin +~10% (energi hilang jadi panas).</p>
+      </section>
+
+      <!-- Result -->
+      <section class="result" aria-live="polite">
+        <p class="result-label">Isi ke app charger</p>
+        <p class="result-value" id="result-value">—</p>
+        <p class="result-unit" id="result-unit">kWh</p>
+        <p class="result-loss" id="result-loss" hidden>termasuk loss ~10%</p>
+        <p class="result-msg" id="result-msg" hidden></p>
+        <button type="button" class="btn-copy" id="btn-copy" disabled>Salin</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Input manual · tanpa OBD/API · hasil 1 desimal</p>
+    </footer>
+  </div>
+  <script src="app.js?v=cap-hint-v3"></script>
+</body>
+</html>
